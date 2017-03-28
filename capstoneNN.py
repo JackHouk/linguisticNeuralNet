@@ -11,25 +11,26 @@ import numpy as np
 
 trainDat = np.load('training_honey.npy')
 testDat = np.load('test_wood.npy')
-testWords = ['kid', 'sweetheart', 'infants', 'have', 'honey', 'structure', 'warning',
-             'facilities', 'guard', 'careful', 'care', 'warn', 'Kids', 'Babies',
-             'baby out', 'dear', 'bodies', 'darling', 'minors', 'structural', 'babies',
-             'kids', 'childhood', 'baby', 'childcare', 'infant', 'Child', 'Children',
-             'children', 'child']
-trainingTargets = np.array([[1, 0, 0],
-                   [0, 1, 0],
-                   [0, 0, 1],
-                   [0, 1, 0],
-                   [1, 0, 0],
-                   [1, 0, 0],
-                   [1, 0, 0],
-                   [1, 0, 0],
-                   [0, 0, 1]])
+testWords = ['child', 'children', 'infant', 'baby', 'childcare', 'childhood', 'kids',
+       'warn', 'facilities', 'bodies', 'dear', 'have', 'structure',
+       'sweetheart', 'careful', 'infants', 'minors', 'darling', 'warning',
+       'baby out', 'kid', 'honey', 'structural', 'babies', 'guard', 'care']
+trainingTargets = np.array([[1, 0, 0, 0],
+                   [0, 1, 0, 0],
+                   [0, 0, 0, 1],
+                   [0, 1, 0, 0],
+                   [1, 0, 0, 0],
+                   [1, 0, 0, 0],
+                   [1, 0, 0, 0],
+                   [1, 0, 0, 0],
+                   [0, 0, 1, 0]])
+
 
 net = tflearn.input_data(shape=[None, 10])
-net = tflearn.fully_connected(net, 6)
-net = tflearn.fully_connected(net, 3, activation='softmax')
-net = tflearn.regression(net)
+net = tflearn.fully_connected(net, 32,  weight_decay = 0.01)
+
+net = tflearn.fully_connected(net, 4, activation='softmax',  weight_decay= 0.01)
+net = tflearn.regression(net, optimizer = "adam",  learning_rate = 0.01)
 
 # Define model
 model = tflearn.DNN(net)
