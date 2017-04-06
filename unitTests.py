@@ -6,18 +6,19 @@ Created on Mon Mar 27 15:35:00 2017
 """
 
 from capstoneScraper import *
-
+import pandas as pd
+import numpy as np
 import unittest
 
 class testScraper( unittest.TestCase ):
     
-    def test_genTargetDict( self ):
+    '''def test_genTargetDict( self ):
         testWord = 'honey'
         expResult = ['miel', 'chérie', 'le miel', 'miels', 'chéri']
         result = {}
         genTargetDict(testWord, result, 'eng')
         result = list(result['honey'].keys())
-        self.assertEqual(set(expResult), set(result))
+        self.assertEqual(set(expResult), set(result))'''
     
     def test_sameLangTranslations( self ):
         sourceWord = 'A'
@@ -45,10 +46,33 @@ class testScraper( unittest.TestCase ):
         result = constructMasterWordList(list1, list2)
         self.assertEqual(result, expResult)
         
-    def test_wholeScraper( self ):
+        #Update with real test values
+    def test_PCA( self ):
+        testData = [[1, 0], [0, -1], [-1, 1]]
+        testData = pd.DataFrame(testData)
+        expResult = pd.DataFrame([-.827970186,
+                                   1.77758033,
+                                   -.992197494,
+                                   -.274210416,
+                                   -1.67580142,
+                                   -.912949103,
+                                   .0991094375,
+                                   1.14457216,
+                                   .438046137,
+                                   1.22382056])
+        result = PCA(testData, 1)
+        np.testing.assert_array_equal(result, expResult)
+        
+    '''def test_SaveNpArray( self ):
+        np.save('trainingTest.npy', generateWordData('honey', 2))
+        result = np.load('trainingTest.npy')
+        self.assertEqual(result.shape, generateWordData('honey', 2).shape)'''
+        
+        
+    '''def test_wholeScraper( self ):
         expResult = (13, 10)
         result = generateWordData('boat', 2).shape
-        self.assertEqual(result, expResult)
+        self.assertEqual(result, expResult)'''
         
 if __name__ == '__main__':
     unittest.main()

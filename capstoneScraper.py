@@ -108,16 +108,19 @@ def genDataframe(sourceIterations, wordDicts, allWords):
     return wordData
 
 def PCA(wordData, numCols):
-    #reduce the dimensionality of the dataset to n x 30
+    #reduce the dimensionality of the dataset to n x numCols
     #this is to ensure consistent column meanings for the neural net
     #Credit to Sebastian Raschka's plotly tutorial for significant contributions to the PCA code section
     #Original tutorial can be found at https://plot.ly/ipython-notebooks/principal-component-analysis/#PCA-Vs.-LDA
     covariance = wordData.cov()
+    print(covariance)
     eigenVals, eigenVects = np.linalg.eigh(covariance.values.real)
+    print(eigenVals, eigenVects)
     eigenPairs = [(np.abs(eigenVals[i]), eigenVects[:,i]) for i in range(len(eigenVals))]
     eigenPairs = sorted(eigenPairs, key=lambda eigenPairs: eigenPairs[0])
     eigenPairs.reverse()
-    transformation = np.array([i[1] for i in eigenPairs[0:10]])
+    print(eigenPairs)
+    transformation = np.array([i[1] for i in eigenPairs[0:numCols]])
     transformation = np.transpose(transformation)
     preparedData = wordData.dot(transformation)
     return preparedData
